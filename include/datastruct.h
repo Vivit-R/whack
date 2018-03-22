@@ -7,7 +7,7 @@ struct listlink {
     struct listlink *next;
 };
 
-
-/* void removelink(struct listlink *l); */
+void addlink(struct listlink *l, void *elem);
+void removelink(struct listlink **l);
 
 #endif
