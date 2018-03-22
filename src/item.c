@@ -16,7 +16,7 @@ void init_itypes() {
     mkitype('?', "dummy", "dummy");
 }
 
-void free_itypes() {
+void freeitypes() {
     while (rmitype());
 }
 

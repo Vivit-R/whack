@@ -3,37 +3,36 @@
 #include <string.h>
 
 #include "item.h"
+#include "map.h"
 #include "init.h"
 #include "datastruct.h"
 
 
 #define IFARG(s) (argc-1 && !(strcmp(argv[1], s)))
 
-void test_leaks();
-void test_links();
+void leakstest();
+void linkstest();
 
 int main(int argc, char** argv) {
     if (IFARG("leaks")) {
-        test_leaks();
+        leakstest();
         printf("Checking for leaks...\n");
     }
 
     if (IFARG("links")) {
         printf("Checking links...\n");
-        test_links();
+        linkstest();
     }
-
-
 
     return 0;
 }
 
-void test_leaks() {
+void leakstest() {
     init_all();
-    free_all();
+    freeall();
 }
 
-void test_links() {
+void linkstest() {
     struct listlink *foo = malloc(sizeof (struct listlink));
 
     int *bar = malloc(sizeof (int));
@@ -49,4 +48,14 @@ void test_links() {
     free(bar);
 }
 
+void mapstest() {
+    dungeon = 
+}
 
+void displaytest() {
+    init_display();
+
+    /* TODO */
+
+    end_display();
+}

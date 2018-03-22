@@ -17,7 +17,7 @@ void addlink(struct listlink *l, void *elem) {
 }
 
 /* Does NOT free the element, only the link itself. */
-void removelink(struct listlink *l) {
+void rmlink(struct listlink *l) {
     if (l->prev) l->prev->next = l->next;
     if (l->next) l->next->prev = l->prev;
     free(l);
@@ -30,7 +30,7 @@ void removelink(struct listlink *l) {
 void clearlinks(struct listlink *l, void (*op)(void*)) {
     if (!l) return;
 
-    struct listlink *next_to_remove = 
+    struct listlink *rm_next = 
         l->prev ? l->prev :
         l->next ? l->next :
         NULL; 
@@ -39,7 +39,7 @@ void clearlinks(struct listlink *l, void (*op)(void*)) {
         op(l->elem);
     }
 
-    removelink(l);
-    clearlinks(next_to_remove, op);
+    rmlink(l);
+    clearlinks(rm_next, op);
 }
 

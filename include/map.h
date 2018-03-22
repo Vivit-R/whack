@@ -24,7 +24,7 @@ typedef struct type_tile {
     int ycoord;
     int xcoord;
 
-    int visibility;
+    int seen; /* UNSEEN, SEEN, or VISIBLE? */
     char glyph;
     item *item_pile;
 } tile;
@@ -32,6 +32,9 @@ typedef struct type_tile {
 struct floor {
     int branch;
     tile grid[MAP_HEIGHT][MAP_WIDTH];
-} *dungeon;
+};
+
+extern struct floor *dungeon;
+extern int dungeon_depth;
 
 #endif

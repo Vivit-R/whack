@@ -13,9 +13,11 @@ void init_commands() {
 
 void init_all() {
     init_itypes();
+    init_display();
     init_commands();
 }
 
-void free_all() {
-    free_itypes();
+void freeall() {
+    freeitypes();
+    end_display();
 }
