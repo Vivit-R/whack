@@ -24,8 +24,10 @@ void removelink(struct listlink *l) {
     l = NULL;
 }
 
-/* Removes all links in a linked list containing the given element. */
-void clearlinks(struct listlink *l) {
+/* Removes all links in a linked list containing the given element.
+ * If function pointer op is not null, execute it on l->elem before removing
+ * l. */
+void clearlinks(struct listlink *l, void (*op)(void*)) {
     if (!l) return;
 
     struct listlink *next_to_remove = 
@@ -33,7 +35,11 @@ void clearlinks(struct listlink *l) {
         l->next ? l->next :
         NULL; 
 
+    if (op) {
+        op(l->elem);
+    }
+
     removelink(l);
-    clearlinks(next_to_remove);
+    clearlinks(next_to_remove, op);
 }
 

@@ -1,13 +1,23 @@
 #include <ncurses.h>
 #include "display.h"
+#include "datastruct.h"
+
+void vupdate_tile(void *t);
+void update_tile(tile *t);
 
 /* Updates all tiles that need updating and pops them from the list. */
 void update_tiles(struct listlink *l) {
-    if (l) {
-        mvaddch(((tile*) l->elem)->ycoord,
-                ((tile*) l->elem)->xcoord,
-                char_to_print(l->elem));
-    }
+    clearlinks(l, vupdate_tile);
+}
+
+/* Two seperate functions, update and vupdate, to allow passing of
+ * function pointer to clearlinks */
+void update_tile(tile *t) {
+   mvaddch(t->ycoord, t->xcoord, char_to_print(t));
+}
+
+void vupdate_tile(void *t) {
+    update_tile((tile*) t);
 }
 
 /* Determine what character to print to display a square */

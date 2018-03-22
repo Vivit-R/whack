@@ -7,19 +7,22 @@
 #include "datastruct.h"
 
 
+#define IFARG(s) (argc-1 && !(strcmp(argv[1], s)))
+
 void test_leaks();
 void test_links();
 
 int main(int argc, char** argv) {
-    if (argc-1 && !(strcmp(argv[1], "leak"))) {
+    if (IFARG("leaks")) {
         test_leaks();
         printf("Checking for leaks...\n");
     }
 
-    if (argc-1 && !(strcmp(argv[1], "links"))) {
+    if (IFARG("links")) {
         printf("Checking links...\n");
         test_links();
     }
+
 
 
     return 0;
@@ -42,7 +45,7 @@ void test_links() {
     addlink(foo, bar);
     addlink(foo, bar);
 
-    clearlinks(foo);
+    clearlinks(foo, NULL);
     free(bar);
 }
 
