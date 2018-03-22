@@ -3,7 +3,7 @@
 
 /* Adds a link to the linked list. All arguments must be already allocated. */
 void addlink(struct listlink *l, void *elem) {
-    struct listlink *this = malloc(sizeof (struct) listlink);
+    struct listlink *this = malloc(sizeof (struct listlink));
     this->elem = elem;
     this->prev = l;
     this->next = l->next;
@@ -14,14 +14,12 @@ void addlink(struct listlink *l, void *elem) {
      * element in the linked list to this one. */
     if (this->next)
         this->next->prev = this;
-
-    return this;
 }
 
 /* Does NOT free the element, only the link itself. */
 void removelink(struct listlink *l) {
-    l->prev->next = l->next;
-    l->next->prev = l->prev;
+    if (l->prev) l->prev->next = l->next;
+    if (l->next) l->next->prev = l->prev;
     free(l);
     l = NULL;
 }
@@ -36,6 +34,6 @@ void clearlinks(struct listlink *l) {
         NULL; 
 
     removelink(l);
-    clearlinks(prev);
+    clearlinks(next_to_remove);
 }
 

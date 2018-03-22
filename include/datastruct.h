@@ -8,6 +8,7 @@ struct listlink {
 };
 
 void addlink(struct listlink *l, void *elem);
-void removelink(struct listlink **l);
+void removelink(struct listlink *l);
+void clearlinks(struct listlink *l);
 
 #endif
