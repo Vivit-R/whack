@@ -1,13 +1,19 @@
 #include <stdlib.h>
 #include "datastruct.h"
 
-/* Adds a link to the linked list. All arguments must be already allocated. */
+/* Adds a link to the linked list after given link l. */
 void addlink(struct listlink *l, void *elem) {
     struct listlink *this = malloc(sizeof (struct listlink));
     this->elem = elem;
     this->prev = l;
-    this->next = l->next;
-    l->next = this;
+
+    /* If l is null, we're being added at the end of a list. */
+    if (l) {
+        this->next = l->next;
+        l->next = this;
+    } else {
+        this->next = NULL;
+    }
 
     /* If we are at the end of the list, this->next will be NULL, and this
      * statement will not execute. Otherwise, it will connect the following

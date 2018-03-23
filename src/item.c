@@ -3,13 +3,13 @@
 #include "item.h"
 
 void mkitype(char glyph, const char *idname, const char *unidname);
-int rmitype();
+int popitype();
 void mkitem(struct itype itype, const char *name);
 
 struct itype *itypes;
 int num_itypes;
 
-void init_itypes() {
+void inititypes() {
     itypes = NULL;
     num_itypes = 0;
 
@@ -17,7 +17,7 @@ void init_itypes() {
 }
 
 void freeitypes() {
-    while (rmitype());
+    while (popitype());
 }
 
 void mkitype(char glyph, const char *idname, const char *unidname) {
@@ -35,7 +35,7 @@ void mkitype(char glyph, const char *idname, const char *unidname) {
 }
 
 /* Frees allocated data for the top itype */
-int rmitype() {
+int popitype() {
     if (num_itypes) {
         num_itypes--;
         free(itypes[num_itypes].idname);
@@ -50,5 +50,4 @@ int rmitype() {
 
     return num_itypes;
 }
-
 

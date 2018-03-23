@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <ncurses.h>
 #include "display.h"
 #include "datastruct.h"
@@ -7,20 +8,25 @@ struct listlink *tiles_to_update;
 void vupdtile(void *t);
 void updtile(tile *t);
 
-void init_display() {
+
+/* Sets up the curses display */
+void initdisplay() {
     initscr();
     noecho();
+    tiles_to_update = NULL;
 }
 
-void end_display() {
+/* Cleans up the curses display */
+void enddisplay() {
+    free(tiles_to_update);
     echo();
     endwin();
 }
 
 
 /* Updates all tiles that need updating and pops them from the list. */
-void updtiles(struct listlink *l) {
-    clearlinks(l, vupdtile);
+void updtiles() {
+    clearlinks(tiles_to_update, vupdtile);
 }
 
 /* Two seperate functions, update and vupdate, to allow passing of a
@@ -37,7 +43,6 @@ char char_to_print(tile *t) {
     return t->item_pile ? t->item_pile->glyph : t->glyph;
 }
 
-/* Sets a tile's visibility to */
-void reveal_tile(tile *t) {
-    return ;
+void queueupdt(tile *t) {
+    addlink(tiles_to_update, t);
 }

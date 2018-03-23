@@ -5,19 +5,19 @@
 char commands[128];
 
 /* Initializes all commands to their default value. */
-void init_commands() {
+void initcommands() {
     for (int i = 0; i < 128; i++) {
         commands[i] = (char) i;
     }
 }
 
-void init_all() {
-    init_itypes();
-    init_display();
-    init_commands();
+void initall() {
+    inititypes();
+    initdisplay();
+    initcommands();
 }
 
 void freeall() {
     freeitypes();
-    end_display();
+    enddisplay();
 }

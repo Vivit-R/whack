@@ -1,9 +1,10 @@
 #ifndef __MAP__
 #define __MAP__
 
-#define UNSEEN -1   /* Tile has not yet been seen */
-#define SEEN    0   /* Tile is not in line of sight, but has been seen */
-#define VISIBLE 1   /* Tile is in line of sight */
+#define UNDISCOVERED    -1   /* Tile has not yet been seen */
+#define DISCOVERED       0   /* Tile is not in line of sight, but has been 
+                                seen */
+#define SEEN             1   /* Tile is in line of sight */
 
 #define MAP_WIDTH 80
 #define MAP_HEIGHT 26
@@ -35,6 +36,12 @@ struct floor {
 };
 
 extern struct floor *dungeon;
-extern int dungeon_depth;
+extern int dundepth;
+
+struct floor solidRock();
+void addlev(struct floor (*generate)(void));
+void initdungeon();
+void freedungeon();
+void magicmapping(struct floor *l);
 
 #endif

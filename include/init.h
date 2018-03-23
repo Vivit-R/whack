@@ -1,13 +1,13 @@
 #ifndef __INIT__
 #define __INIT__
 
-void init_commands();
-void init_itypes();
+void initcommands();
+void inititypes();
 void freeitypes();
-void init_display();
-void end_display();
+void initdisplay();
+void enddisplay();
 
-void init_all();
+void initall();
 void freeall();
 
 #endif
