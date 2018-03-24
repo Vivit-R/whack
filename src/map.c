@@ -25,6 +25,7 @@ struct floor solidRock() {
             ret.grid[i][j].glyph = TILE_WALL;
             ret.grid[i][j].ycoord = i;
             ret.grid[i][j].xcoord = j;
+            ret.grid[i][j].seen = -1;
             ret.grid[i][j].item_pile = NULL;
         }
     }
@@ -65,7 +66,7 @@ void freedungeon() {
 /* Sets all tiles on the given level to visible */
 void magicmapping(struct floor *lev) {
     for (int i = 0; i < MAP_HEIGHT; i++) {
-        for (int j = 0; j < MAP_WIDTH; i++) {
+        for (int j = 0; j < MAP_WIDTH; j++) {
             discovertile(&(lev->grid[i][j]));
         }
     }

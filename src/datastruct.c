@@ -2,7 +2,7 @@
 #include "datastruct.h"
 
 /* Adds a link to the linked list after given link l. */
-void addlink(struct listlink *l, void *elem) {
+struct listlink *addlink(struct listlink *l, void *elem) {
     struct listlink *this = malloc(sizeof (struct listlink));
     this->elem = elem;
     this->prev = l;
@@ -11,15 +11,13 @@ void addlink(struct listlink *l, void *elem) {
     if (l) {
         this->next = l->next;
         l->next = this;
+        if (this->next)
+            this->next->prev = this;
     } else {
         this->next = NULL;
     }
 
-    /* If we are at the end of the list, this->next will be NULL, and this
-     * statement will not execute. Otherwise, it will connect the following
-     * element in the linked list to this one. */
-    if (this->next)
-        this->next->prev = this;
+    return this;
 }
 
 /* Does NOT free the element, only the link itself. */
@@ -48,4 +46,3 @@ void clearlinks(struct listlink *l, void (*op)(void*)) {
     rmlink(l);
     clearlinks(rm_next, op);
 }
-

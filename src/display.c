@@ -27,6 +27,7 @@ void enddisplay() {
 /* Updates all tiles that need updating and pops them from the list. */
 void updtiles() {
     clearlinks(tiles_to_update, vupdtile);
+    refresh();
 }
 
 /* Two seperate functions, update and vupdate, to allow passing of a
@@ -43,6 +44,7 @@ char char_to_print(tile *t) {
     return t->item_pile ? t->item_pile->glyph : t->glyph;
 }
 
+/* Adds a tile to the list of tiles to update */
 void queueupdt(tile *t) {
-    addlink(tiles_to_update, t);
+    tiles_to_update = addlink(tiles_to_update, t);
 }
