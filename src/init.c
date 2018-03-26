@@ -16,6 +16,7 @@ void initall() {
     inititypes();
     initdisplay();
     initdungeon();
+    initmons();
     initcommands();
 }
 
@@ -24,4 +25,5 @@ void freeall() {
     freeitypes();
     freedungeon();
     enddisplay();
+    freemons();
 }

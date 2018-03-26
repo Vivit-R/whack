@@ -5,6 +5,7 @@
 
 #include "item.h"
 #include "map.h"
+#include "monster.h"
 #include "display.h"
 #include "init.h"
 #include "datastruct.h"
@@ -17,33 +18,31 @@ void maptest();
 void displaytest();
 void testspecificmap(struct floor(*generate)(void));
 void testhollow();
+void testmon();
 
 int main(int argc, char** argv) {
     if (IFARG("leaks")) {
         leakstest();
         printf("Checking for leaks...\n");
-    }
-
-    if (IFARG("links")) {
+    } else if (IFARG("links")) {
         printf("Checking links...\n");
         linkstest();
-    }
-
-    if (IFARG("maps")) {
+    } else if (IFARG("maps")) {
         printf("Checking maps...\n");
         maptest();
-    }
-
-    if (IFARG("display")) {
+    } else if (IFARG("monsters")) {
+        printf("Checking monsters...\n");
+        testmon();
+    } else if (IFARG("display")) {
         displaytest();
-    }
-
-    if (IFARG("noise")) {
+    } else if (IFARG("noise")) {
         testspecificmap(noise);
-    }
-
-    if (IFARG("hollow")) {
+    } else if (IFARG("hollow")) {
         testhollow();
+    } else if (IFARG("monsters")) {
+        testmon();
+    } else {
+        printf("Argument not recognized, or none was supplied!\n");
     }
 
     return 0;
@@ -107,4 +106,13 @@ void testhollow() {
     getch();
 
     freeall();
+}
+
+void testmon() {
+    initmons();
+    mkmon('f', "dummy");
+    mkmon('f', "dummy");
+    mkmon('f', "dummy");
+    mkmon('f', "dummy");
+    freemons();
 }

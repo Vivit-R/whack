@@ -1,4 +1,5 @@
 /* FIXME: WHAT IF YOU CHANGE THE PROPERTIES OF A LEVEL THE PLAYER ISN'T ON? */
+/* TODO MONSTER MOVEMENT */
 
 #include <stdlib.h>
 #include "map.h"
@@ -13,6 +14,7 @@ void seetile(tile *t);
 void discovertile(tile *t);
 void forgettile(tile *t);
 
+/** LEVEL GENERATION **/
 /* Creates and returns a level filled with solid rock, from which we can then 
  * carve out the actual labyrinth. */
 struct floor solidRock() {
@@ -21,11 +23,7 @@ struct floor solidRock() {
 
     for (int i = 0; i < MAP_HEIGHT; i++) {
         for (int j = 0; j < MAP_WIDTH; j++) {
-            ret.grid[i][j].glyph = TILE_WALL;
-            ret.grid[i][j].ycoord = i;
-            ret.grid[i][j].xcoord = j;
-            ret.grid[i][j].seen = -1;
-            ret.grid[i][j].item_pile = NULL;
+            ret.grid[i][j] = mktile(i, j, TILE_WALL);
         }
     }
 
@@ -37,9 +35,7 @@ struct floor noise() {
 
     for (int i = 0; i < MAP_HEIGHT; i++) {
         for (int j = 0; j < MAP_WIDTH; j++) {
-            if (!(random() % 2)) {
-                ret.grid[i][j].glyph = TILE_FLOOR;
-            }
+            if (!(random() % 2)) ret.grid[i][j].glyph = TILE_FLOOR;
         }
     }
 
@@ -56,7 +52,7 @@ void hollowoutroom(struct floor *lev,
         // reporterror("Bad coordinates for hollowoutroom");
         return;
     }
- 
+
     for (int i = 0; i < origy; i++) {
         for (int j = 0; j < origx; j++) {
             if (lev->grid[origy+i][origx+j].glyph == TILE_WALL)
@@ -76,12 +72,25 @@ struct floor nineRooms() {
 
 
 
-
+/** MEMORY MANAGEMENT **/
 /* Adds a level to the dungeon */
 void addlev(struct floor (*generate)(void)) {
     dungeon = realloc(dungeon, (1+dundepth) * sizeof (struct floor));
     dungeon[dundepth] = generate();
     dundepth++;
+}
+
+/* Initializes a tile */
+tile mktile(int ycoord, int xcoord, char glyph) {
+    tile ret;
+    ret.glyph = glyph;
+    ret.ycoord = ycoord;
+    ret.xcoord = xcoord;
+    ret.seen = UNDISCOVERED;
+    ret.item_pile = NULL;
+    ret.occupant = NULL;
+
+    return ret;
 }
 
 /* Removes given floor from the dungeon */
@@ -94,7 +103,7 @@ void rmlev(struct floor *lev) {
     }
 }
 
-/* Initializes the dungeon */
+/* Allocates memory for the dungeon */
 void initdungeon() {
     dungeon = malloc(sizeof (struct floor));
 }
@@ -107,6 +116,8 @@ void freedungeon() {
     free(dungeon);
 }
 
+
+/** CHANGES TO STATE **/
 /* Sets all tiles on the given level to visible */
 void magicmapping(struct floor *lev) {
     for (int i = 0; i < MAP_HEIGHT; i++) {

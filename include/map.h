@@ -21,12 +21,19 @@
 #include "datastruct.h"
 #include "item.h"
 
-typedef struct type_tile {
+/* Putting this forward-declaration of the typedef before
+ * including monster.h, because monster.h needs it. */
+typedef struct t_tile tile;
+#include "monster.h"
+
+typedef struct t_tile {
     int ycoord;
     int xcoord;
 
     int seen; /* UNSEEN, SEEN, or VISIBLE? */
     char glyph;
+
+    mon *occupant;
     item *item_pile;
 } tile;
 
@@ -46,5 +53,7 @@ void addlev(struct floor (*generate)(void));
 void magicmapping(struct floor *l);
 void hollowoutroom(struct floor *lev, int origy, int origx, int dimy,
         int dimx); 
+
+tile mktile(int ycoord, int xcoord, char glyph);
 
 #endif
