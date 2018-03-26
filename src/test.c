@@ -16,6 +16,7 @@ void linkstest();
 void maptest();
 void displaytest();
 void testspecificmap(struct floor(*generate)(void));
+void testhollow();
 
 int main(int argc, char** argv) {
     if (IFARG("leaks")) {
@@ -39,6 +40,10 @@ int main(int argc, char** argv) {
 
     if (IFARG("noise")) {
         testspecificmap(noise);
+    }
+
+    if (IFARG("hollow")) {
+        testhollow();
     }
 
     return 0;
@@ -80,14 +85,26 @@ void displaytest() {
 }
 
 void testspecificmap(struct floor(*generate)(void)) {
-    initdisplay();
-    initdungeon();
+    initall();
 
     addlev(generate);
     magicmapping(dungeon);
     refresh();
     getch();
 
-    freedungeon();
-    enddisplay();
+    freeall();
+}
+
+void testhollow() {
+    initall();
+
+    addlev(solidRock);
+
+    hollowoutroom(dungeon, 10, 10, 10, 10);
+
+    magicmapping(dungeon);
+    refresh();
+    getch();
+
+    freeall();
 }

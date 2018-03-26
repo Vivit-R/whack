@@ -11,13 +11,17 @@ void initcommands() {
     }
 }
 
+/* initializes everything */
 void initall() {
     inititypes();
     initdisplay();
+    initdungeon();
     initcommands();
 }
 
+/* frees everything */
 void freeall() {
     freeitypes();
+    freedungeon();
     enddisplay();
 }

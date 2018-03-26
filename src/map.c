@@ -46,11 +46,32 @@ struct floor noise() {
     return ret;
 }
 
+void hollowoutroom(struct floor *lev,
+        int origy, int origx,
+        int dimy, int dimx) {
+    if (origx < 0 || origy < 0 || 
+            origx > MAP_WIDTH || origy > MAP_HEIGHT ||
+            dimy < 0 || dimx < 0 ||
+            origx + dimx > MAP_WIDTH || origy + dimy > MAP_HEIGHT) {
+        // reporterror("Bad coordinates for hollowoutroom");
+        return;
+    }
+ 
+    for (int i = 0; i < origy; i++) {
+        for (int j = 0; j < origx; j++) {
+            if (lev->grid[origy+i][origx+j].glyph == TILE_WALL)
+                lev->grid[origy+i][origx+j].glyph = TILE_FLOOR;
+        }
+    }
+}
+
+
 /* Classic 3x3 level a la the original rogue *
 struct floor nineRooms() {
     struct floor ret = solidRock();
-    random
-}*/
+    
+    for 
+} */
 
 
 

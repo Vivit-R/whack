@@ -43,8 +43,8 @@ struct floor noise();
 
 
 void addlev(struct floor (*generate)(void));
-void initdungeon();
-void freedungeon();
 void magicmapping(struct floor *l);
+void hollowoutroom(struct floor *lev, int origy, int origx, int dimy,
+        int dimx); 
 
 #endif
