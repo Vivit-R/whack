@@ -4,8 +4,6 @@
 #include "map.h"
 
 char char_to_print(tile *t);
-extern struct listlink *tiles_to_update;
-void updtiles();
-void queueupdt(tile *t);
+void updtile(tile *t);
 
 #endif

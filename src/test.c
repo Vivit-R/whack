@@ -76,7 +76,7 @@ void displaytest() {
     initdungeon();
     addlev(solidRock);
     magicmapping(dungeon);
-    updtiles();
+    refresh();
     getch();
     
     freedungeon();

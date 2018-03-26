@@ -1,4 +1,3 @@
-
 /* FIXME: WHAT IF YOU CHANGE THE PROPERTIES OF A LEVEL THE PLAYER ISN'T ON? */
 
 #include <stdlib.h>
@@ -75,7 +74,7 @@ void magicmapping(struct floor *lev) {
 /* Sets a tile's visibility */
 void setseen(tile *t, int seen) {
     t->seen = seen;
-    queueupdt(t);
+    updtile(t);
 }
 
 void seetile(tile *t) { setseen(t, SEEN); }
