@@ -45,8 +45,9 @@ struct floor {
 extern struct floor *dungeon;
 extern int dundepth;
 
-struct floor solidRock();
+struct floor solidrock();
 struct floor noise();
+struct floor bigroom();
 
 
 void addlev(struct floor (*generate)(void));

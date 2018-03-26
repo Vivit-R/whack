@@ -72,15 +72,15 @@ void linkstest() {
 
 void maptest() {
     initdungeon();
-    addlev(solidRock);
-    addlev(solidRock);
-    addlev(solidRock);
-    addlev(solidRock);
+    addlev(solidrock);
+    addlev(solidrock);
+    addlev(solidrock);
+    addlev(solidrock);
     freedungeon();
 }
 
 void displaytest() {
-    testspecificmap(solidRock);
+    testspecificmap(bigroom);
 }
 
 void testspecificmap(struct floor(*generate)(void)) {
@@ -97,7 +97,7 @@ void testspecificmap(struct floor(*generate)(void)) {
 void testhollow() {
     initall();
 
-    addlev(solidRock);
+    addlev(solidrock);
 
     hollowoutroom(dungeon, 10, 10, 10, 10);
 

@@ -17,7 +17,7 @@ void forgettile(tile *t);
 /** LEVEL GENERATION **/
 /* Creates and returns a level filled with solid rock, from which we can then 
  * carve out the actual labyrinth. */
-struct floor solidRock() {
+struct floor solidrock() {
     struct floor ret;
     ret.branch = -1;
 
@@ -30,17 +30,26 @@ struct floor solidRock() {
     return ret;
 }
 
+/* Generates a level where every square has a 50/50 chance of being a wall
+ * and a 50/50 chance of being a floor. */
 struct floor noise() {
-    struct floor ret = solidRock();
+    struct floor ret = solidrock();
 
     for (int i = 0; i < MAP_HEIGHT; i++) {
         for (int j = 0; j < MAP_WIDTH; j++) {
             if (!(random() % 2)) ret.grid[i][j].glyph = TILE_FLOOR;
         }
     }
+    return ret;
+}
+
+struct floor bigroom() {
+    struct floor ret = solidrock();
+    hollowoutroom(&ret, 1, 1, MAP_HEIGHT-2, MAP_WIDTH-2);
 
     return ret;
 }
+
 
 void hollowoutroom(struct floor *lev,
         int origy, int origx,
@@ -53,8 +62,8 @@ void hollowoutroom(struct floor *lev,
         return;
     }
 
-    for (int i = 0; i < origy; i++) {
-        for (int j = 0; j < origx; j++) {
+    for (int i = 0; i < dimy; i++) {
+        for (int j = 0; j < dimx; j++) {
             if (lev->grid[origy+i][origx+j].glyph == TILE_WALL)
                 lev->grid[origy+i][origx+j].glyph = TILE_FLOOR;
         }
@@ -64,7 +73,7 @@ void hollowoutroom(struct floor *lev,
 
 /* Classic 3x3 level a la the original rogue *
 struct floor nineRooms() {
-    struct floor ret = solidRock();
+    struct floor ret = solidrock();
     
     for 
 } */

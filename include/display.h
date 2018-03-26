@@ -3,6 +3,9 @@
 #include "datastruct.h"
 #include "map.h"
 
+#define FRAMECHAR '*'
+
+
 char char_to_print(tile *t);
 void updtile(tile *t);
 
