@@ -7,7 +7,7 @@
 struct floor *dungeon;
 int dundepth;
 
-void rmlev(struct floor lev);
+void rmlev(struct floor *lev);
 void setseen(tile *t, int seen);
 void seetile(tile *t);
 void discovertile(tile *t);
@@ -32,6 +32,30 @@ struct floor solidRock() {
     return ret;
 }
 
+struct floor noise() {
+    struct floor ret = solidRock();
+
+    for (int i = 0; i < MAP_HEIGHT; i++) {
+        for (int j = 0; j < MAP_WIDTH; j++) {
+            if (!(random() % 2)) {
+                ret.grid[i][j].glyph = TILE_FLOOR;
+            }
+        }
+    }
+
+    return ret;
+}
+
+/* Classic 3x3 level a la the original rogue *
+struct floor nineRooms() {
+    struct floor ret = solidRock();
+    random
+}*/
+
+
+
+
+
 /* Adds a level to the dungeon */
 void addlev(struct floor (*generate)(void)) {
     dungeon = realloc(dungeon, (1+dundepth) * sizeof (struct floor));
@@ -41,10 +65,10 @@ void addlev(struct floor (*generate)(void)) {
 
 /* Removes given floor from the dungeon */
 /* CHANGEME IF YOU ADD POINTERS TO THE TILE STRUCT */
-void rmlev(struct floor lev) {
+void rmlev(struct floor *lev) {
     for (int i = 0; i < MAP_HEIGHT; i++) {
         for (int j = 0; j < MAP_WIDTH; j++) {
-            free(lev.grid[i][j].item_pile);
+            free(lev->grid[i][j].item_pile);
         }
     }
 }
@@ -57,7 +81,7 @@ void initdungeon() {
 /* Frees the dungeon */
 void freedungeon() {
     for (int i = dundepth-1; i >= 0; i--) {
-        rmlev(dungeon[i]);
+        rmlev(&(dungeon[i]));
     }
     free(dungeon);
 }
