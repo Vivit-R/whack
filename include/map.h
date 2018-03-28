@@ -21,8 +21,8 @@
 #include "datastruct.h"
 #include "item.h"
 
-/* Putting this forward-declaration of the typedef before
- * including monster.h, because monster.h needs it. */
+/* Putting some forward-declarations of the structs before
+ * including monster.h, because monster.h needs them. */
 typedef struct t_tile tile;
 #include "monster.h"
 
@@ -43,6 +43,7 @@ struct floor {
 };
 
 extern struct floor *dungeon;
+extern struct floor *curfloor;
 extern int dundepth;
 
 struct floor solidrock();

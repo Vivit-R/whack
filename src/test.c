@@ -109,10 +109,14 @@ void testhollow() {
 }
 
 void testmon() {
-    initmons();
-    mkmon('f', "dummy");
-    mkmon('f', "dummy");
-    mkmon('f', "dummy");
-    mkmon('f', "dummy");
-    freemons();
+    initall();
+
+    addlev(bigroom);
+    magicmapping(dungeon);
+    spawnmons(3, mkmon('f', "dummy"), curfloor);
+    redraw();
+    refresh();
+    getch();
+
+    freeall();
 }

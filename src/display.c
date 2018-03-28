@@ -45,6 +45,14 @@ void updtile(tile *t) {
    mvaddch(t->ycoord, t->xcoord, char_to_print(t));
 }
 
+void redraw() {
+    for (int i = 0; i < MAP_HEIGHT; i++) {
+        for (int j = 0; j < MAP_WIDTH; j++) {
+            updtile(&(dungeon->grid[i][j]));
+        }
+    }
+}
+
 
 /** MESSAGE WINDOW FUNCTIONS **/
 /* Displays an image with a single message, cleaning up after itself *

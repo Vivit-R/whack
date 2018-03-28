@@ -6,6 +6,7 @@
 #include "display.h"
 
 struct floor *dungeon;
+struct floor *curfloor;
 int dundepth;
 
 void rmlev(struct floor *lev);
@@ -115,6 +116,7 @@ void rmlev(struct floor *lev) {
 /* Allocates memory for the dungeon */
 void initdungeon() {
     dungeon = malloc(sizeof (struct floor));
+    curfloor = dungeon;
 }
 
 /* Frees the dungeon */
