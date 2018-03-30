@@ -113,7 +113,7 @@ void testmon() {
 
     addlev(bigroom);
     magicmapping(dungeon);
-    spawnmons(3, mkmon('f', "dummy"), curfloor);
+    spawnmons(3, mkmon('f', "dummy"), dungeon+curfloor);
     redraw();
     refresh();
     getch();

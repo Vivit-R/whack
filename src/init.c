@@ -1,3 +1,5 @@
+#include <stdlib.h>
+#include <time.h>
 #include "command.h"
 #include "item.h"
 #include "init.h"
@@ -13,6 +15,7 @@ void initcommands() {
 
 /* initializes everything */
 void initall() {
+    srand(time(NULL));
     inititypes();
     initdisplay();
     initdungeon();

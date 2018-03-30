@@ -43,7 +43,7 @@ struct floor {
 };
 
 extern struct floor *dungeon;
-extern struct floor *curfloor;
+extern int curfloor;
 extern int dundepth;
 
 struct floor solidrock();
