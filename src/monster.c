@@ -50,14 +50,16 @@ void rmmon(mon *m) {
 /* Attempts to place a monster at a given tile, returning an error code if
  * unsuccessful. */
 int putmon(tile *dest, mon *m) {
+    tile *prevloc = m->loc;
     if (!dest->occupant) {
         if (dest->glyph != '#') {
             dest->occupant = m;
-            if (m->loc) {
-                updtile(m->loc);
-            }
             m->loc = dest;
             updtile(dest);
+            if (prevloc) {
+                prevloc->occupant = NULL;
+                updtile(prevloc);
+            }
             return 0;
         } else {
             return 1; /* Error code 1 = the tile was impassable */
