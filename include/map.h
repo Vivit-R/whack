@@ -57,5 +57,6 @@ void hollowoutroom(struct floor *lev, int origy, int origx, int dimy,
         int dimx); 
 
 tile mktile(int ycoord, int xcoord, char glyph);
+tile *randtile(char glyph);
 
 #endif

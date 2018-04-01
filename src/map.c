@@ -38,7 +38,7 @@ struct floor noise() {
 
     for (int i = 0; i < MAP_HEIGHT; i++) {
         for (int j = 0; j < MAP_WIDTH; j++) {
-            if (!(random() % 2)) ret.grid[i][j].glyph = TILE_FLOOR;
+            if (!(rand() % 2)) ret.grid[i][j].glyph = TILE_FLOOR;
         }
     }
     return ret;
@@ -101,6 +101,17 @@ tile mktile(int ycoord, int xcoord, char glyph) {
     ret.occupant = NULL;
 
     return ret;
+}
+
+/* Randomly selects a tile with the given glyph 
+ * TODO make this more flexible than just a single glyph
+ * also what if there is no such tile on the board? */
+tile *randtile(char glyph) {
+    tile *ret =
+        &(dungeon[curfloor].grid[rand() % MAP_HEIGHT][rand() % MAP_WIDTH]);
+    if (ret->glyph == glyph)
+        return ret;
+    return randtile(glyph);
 }
 
 /* Removes given floor from the dungeon */

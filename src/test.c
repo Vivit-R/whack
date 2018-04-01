@@ -5,24 +5,27 @@
 
 #include "item.h"
 #include "map.h"
+#include "command.h"
 #include "monster.h"
 #include "display.h"
 #include "init.h"
 #include "datastruct.h"
+#include "you.h"
 
 #define IFARG(s) (argc-1 && !(strcmp(argv[1], s)))
 
-void leakstest();
 void linkstest();
 void maptest();
 void displaytest();
 void testspecificmap(struct floor(*generate)(void));
 void testhollow();
 void testmon();
+void testmove();
 
 int main(int argc, char** argv) {
+    initall();
+
     if (IFARG("leaks")) {
-        leakstest();
         printf("Checking for leaks...\n");
     } else if (IFARG("links")) {
         printf("Checking links...\n");
@@ -41,19 +44,17 @@ int main(int argc, char** argv) {
         testhollow();
     } else if (IFARG("monsters")) {
         testmon();
+    } else if (IFARG("movement")) {
+        testmove();
     } else {
         printf("Argument not recognized, or none was supplied!\n");
     }
 
+    freeall();
+
     return 0;
 }
 
-
-/* Test functions */
-void leakstest() {
-    initall();
-    freeall();
-}
 
 void linkstest() {
     struct listlink *foo = malloc(sizeof (struct listlink));
@@ -71,12 +72,10 @@ void linkstest() {
 }
 
 void maptest() {
-    initdungeon();
     addlev(solidrock);
     addlev(solidrock);
     addlev(solidrock);
     addlev(solidrock);
-    freedungeon();
 }
 
 void displaytest() {
@@ -84,39 +83,39 @@ void displaytest() {
 }
 
 void testspecificmap(struct floor(*generate)(void)) {
-    initall();
-
     addlev(generate);
     magicmapping(dungeon);
     refresh();
     getch();
-
-    freeall();
 }
 
 void testhollow() {
-    initall();
-
     addlev(solidrock);
-
     hollowoutroom(dungeon, 10, 10, 10, 10);
 
     magicmapping(dungeon);
     refresh();
     getch();
-
-    freeall();
 }
 
 void testmon() {
-    initall();
-
     addlev(bigroom);
     magicmapping(dungeon);
     spawnmons(3, mkmon('f', "dummy"), dungeon+curfloor);
     redraw();
     refresh();
     getch();
+}
 
-    freeall();
+void testmove() {
+    addlev(bigroom);
+    inityou();
+    putmon(randtile('.'), &you);
+    magicmapping(dungeon+curfloor);
+    refresh();
+
+    while (!done) {
+        getcmd();
+        refresh();
+    }
 }

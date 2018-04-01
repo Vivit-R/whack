@@ -1,6 +1,7 @@
 #ifndef __INIT__
 #define __INIT__
 
+extern int done;
 
 void inityou();
 void freeyou();

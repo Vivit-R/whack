@@ -4,6 +4,8 @@
 #include "item.h"
 #include "init.h"
 
+int done;
+
 /* initializes everything */
 void initall() {
     srand(time(NULL));
@@ -12,6 +14,8 @@ void initall() {
     initdungeon();
     initmons();
     initcommands();
+
+    done = 0;
 }
 
 /* frees everything */

@@ -2,6 +2,7 @@
 #include <string.h>
 #include "monster.h"
 #include "map.h"
+#include "display.h"
 
 mon *mregistry;
 int nummons;
@@ -51,8 +52,12 @@ void rmmon(mon *m) {
 int putmon(tile *dest, mon *m) {
     if (!dest->occupant) {
         if (dest->glyph != '#') {
-            m->loc = dest;
             dest->occupant = m;
+            if (m->loc) {
+                updtile(m->loc);
+            }
+            m->loc = dest;
+            updtile(dest);
             return 0;
         } else {
             return 1; /* Error code 1 = the tile was impassable */
@@ -72,7 +77,8 @@ int movemon(int dy, int dx, mon *m) {
 }
 
 /* Spawns a number of copies of the given monster on the given level in random
-   locations. Temporary, I hope hope hope. */
+   locations. Temporary, I hope hope hope.
+   TODO integrate this with randtile? */
 void spawnmons(int n, mon *m, struct floor *lev) {
     mon *cpy;
     int r1;
