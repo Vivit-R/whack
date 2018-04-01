@@ -20,4 +20,5 @@ extern int nummons;
 
 mon *mkmon(char glyph, const char *name);
 void spawnmons(int n, mon *m, struct floor *lev);
+int movemon(int dy, int dx, mon *m);
 #endif

@@ -66,7 +66,9 @@ int putmon(tile *dest, mon *m) {
 
 /* Tries to put a monster in a location relative to its current one */
 int movemon(int dy, int dx, mon *m) {
-    return putmon(&((dungeon+curfloor)->grid[m->loc->ycoord+dy][m->loc->xcoord+dx]), m);
+    return putmon(
+            &((dungeon+curfloor)->grid[m->loc->ycoord+dy][m->loc->xcoord+dx]),
+            m);
 }
 
 /* Spawns a number of copies of the given monster on the given level in random

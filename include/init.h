@@ -1,6 +1,10 @@
 #ifndef __INIT__
 #define __INIT__
 
+
+void inityou();
+void freeyou();
+
 void initcommands();
 
 void inititypes();
