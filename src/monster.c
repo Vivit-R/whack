@@ -52,7 +52,7 @@ void rmmon(mon *m) {
 int putmon(tile *dest, mon *m) {
     tile *prevloc = m->loc;
     if (!dest->occupant) {
-        if (dest->glyph != '#') {
+        if (dest->tiletype != TILE_WALL) {
             dest->occupant = m;
             m->loc = dest;
             updtile(dest);

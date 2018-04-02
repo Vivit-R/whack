@@ -32,6 +32,7 @@ void initcommands() {
 /* Getches a keystroke, translates it into a command via the commands[] array,
    and then executes the appropriate command. */
 void getcmd() {
+    move(you.loc->ycoord, you.loc->xcoord);
     char cmd = commands[(int) getch()];
 
     switch (cmd) {

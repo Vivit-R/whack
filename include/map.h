@@ -9,17 +9,22 @@
 #define MAP_WIDTH 80
 #define MAP_HEIGHT 26
 
-#define TILE_WALL           '#'
-#define TILE_PILLAR         '|'
-#define TILE_FLOOR          '.'
-#define TILE_CLOSED_DOOR    '+'
-#define TILE_OPEN_DOOR      '\\'
-#define TILE_ALTAR          '_'
-#define TILE_SWITCH_ON      ';'
-#define TILE_SWITCH_OFF     ':'
+
+#define NUM_TILE_TYPES 9
+
+#define TILE_FLOOR          0
+#define TILE_WALL           1
+#define TILE_PILLAR         2
+#define TILE_CLOSED_DOOR    3
+#define TILE_OPEN_DOOR      4
+#define TILE_ALTAR          5
+#define TILE_UPSTAIR        6
+#define TILE_DOWNSTAIR      7
 
 #include "datastruct.h"
 #include "item.h"
+
+extern char tile_chars[NUM_TILE_TYPES];
 
 /* Putting some forward-declarations of the structs before
  * including monster.h, because monster.h needs them. */
@@ -31,6 +36,7 @@ typedef struct t_tile {
     int xcoord;
 
     int seen; /* UNSEEN, SEEN, or VISIBLE? */
+    int tiletype;
     char glyph;
 
     mon *occupant;
@@ -56,7 +62,7 @@ void magicmapping(struct floor *l);
 void hollowoutroom(struct floor *lev, int origy, int origx, int dimy,
         int dimx); 
 
-tile mktile(int ycoord, int xcoord, char glyph);
-tile *randtile(char glyph);
+tile mktile(int ycoord, int xcoord, int tiletype);
+tile *randtile(int tiletype);
 
 #endif

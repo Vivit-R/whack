@@ -110,7 +110,7 @@ void testmon() {
 void testmove() {
     addlev(bigroom);
     inityou();
-    putmon(randtile('.'), &you);
+    putmon(randtile(TILE_FLOOR), &you);
     magicmapping(dungeon+curfloor);
     refresh();
 

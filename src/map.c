@@ -4,10 +4,12 @@
 #include <stdlib.h>
 #include "map.h"
 #include "display.h"
+#include "dice.h"
 
 struct floor *dungeon;
 int curfloor;
 int dundepth;
+char tile_chars[NUM_TILE_TYPES];
 
 void rmlev(struct floor *lev);
 void setseen(tile *t, int seen);
@@ -38,9 +40,10 @@ struct floor noise() {
 
     for (int i = 0; i < MAP_HEIGHT; i++) {
         for (int j = 0; j < MAP_WIDTH; j++) {
-            if (!(rand() % 2)) ret.grid[i][j].glyph = TILE_FLOOR;
+            if (!(rand() % 2)) ret.grid[i][j].tiletype = TILE_FLOOR;
         }
     }
+
     return ret;
 }
 
@@ -65,18 +68,41 @@ void hollowoutroom(struct floor *lev,
 
     for (int i = 0; i < dimy; i++) {
         for (int j = 0; j < dimx; j++) {
-            if (lev->grid[origy+i][origx+j].glyph == TILE_WALL)
-                lev->grid[origy+i][origx+j].glyph = TILE_FLOOR;
+            if (lev->grid[origy+i][origx+j].tiletype == TILE_WALL)
+                lev->grid[origy+i][origx+j].tiletype = TILE_FLOOR;
+                lev->grid[origy+i][origx+j].glyph = tile_chars[TILE_FLOOR];
         }
     }
 }
 
 
 /* Classic 3x3 level a la the original rogue *
-struct floor nineRooms() {
+struct floor threebythree() {
     struct floor ret = solidrock();
-    
-    for 
+    int numrooms = d(3, 3);
+
+    int rooms[9] = {0};
+
+    for (int i = 0; i < numrooms; i++) {
+        int r = rand() % 9;
+        if (rooms[r]) {
+            i--;
+        } else {
+            rooms[r] = 1;
+        }
+    }
+
+    for (int i = 0; i < 9; i++) {
+        if (rooms[r]) {
+            int height = d(3, 2) + 1;
+            int width = d(3, 6);
+            hollowoutroom(&ret, d(1, 8), d(1, 8-height), height, width);
+            
+        }
+        * FIXME make this more robust to handle possible different sizes of 
+         * floor *
+    }
+
 } */
 
 
@@ -91,9 +117,10 @@ void addlev(struct floor (*generate)(void)) {
 }
 
 /* Initializes a tile */
-tile mktile(int ycoord, int xcoord, char glyph) {
+tile mktile(int ycoord, int xcoord, int tiletype) {
     tile ret;
-    ret.glyph = glyph;
+    ret.tiletype = tiletype;
+    ret.glyph = tile_chars[tiletype];
     ret.ycoord = ycoord;
     ret.xcoord = xcoord;
     ret.seen = UNDISCOVERED;
@@ -106,12 +133,12 @@ tile mktile(int ycoord, int xcoord, char glyph) {
 /* Randomly selects a tile with the given glyph 
  * TODO make this more flexible than just a single glyph
  * also what if there is no such tile on the board? */
-tile *randtile(char glyph) {
+tile *randtile(int tiletype) {
     tile *ret =
         &(dungeon[curfloor].grid[rand() % MAP_HEIGHT][rand() % MAP_WIDTH]);
-    if (ret->glyph == glyph)
+    if (ret->tiletype == tiletype)
         return ret;
-    return randtile(glyph);
+    return randtile(tiletype);
 }
 
 /* Removes given floor from the dungeon */
@@ -124,10 +151,25 @@ void rmlev(struct floor *lev) {
     }
 }
 
-/* Allocates memory for the dungeon */
+/* Allocates memory for the dungeon and initialize characters dungeon
+ * features */
 void initdungeon() {
     dungeon = malloc(sizeof (struct floor));
     curfloor = 0;
+
+
+    for (int i = 0; i < NUM_TILE_TYPES; i++) {
+        tile_chars[i] = ' ';
+    }
+
+    tile_chars[TILE_FLOOR]       = '.';
+    tile_chars[TILE_WALL]        = '#';
+    tile_chars[TILE_PILLAR]      = '0';
+    tile_chars[TILE_CLOSED_DOOR] = '+';
+    tile_chars[TILE_OPEN_DOOR]   = '\\';
+    tile_chars[TILE_ALTAR]       = '_';
+    tile_chars[TILE_UPSTAIR]     = '<';
+    tile_chars[TILE_DOWNSTAIR]   = '>';
 }
 
 /* Frees the dungeon */
