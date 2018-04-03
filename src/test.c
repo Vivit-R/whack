@@ -46,6 +46,8 @@ int main(int argc, char** argv) {
         testmon();
     } else if (IFARG("movement")) {
         testmove();
+    } else if (IFARG("3x3")) {
+        testspecificmap(threebythree);
     } else {
         printf("Argument not recognized, or none was supplied!\n");
     }

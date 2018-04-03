@@ -2,6 +2,7 @@
 /* TODO MONSTER MOVEMENT */
 
 #include <stdlib.h>
+#include <ncurses.h>
 #include "map.h"
 #include "display.h"
 #include "dice.h"
@@ -68,21 +69,23 @@ void hollowoutroom(struct floor *lev,
 
     for (int i = 0; i < dimy; i++) {
         for (int j = 0; j < dimx; j++) {
-            if (lev->grid[origy+i][origx+j].tiletype == TILE_WALL)
+            if (lev->grid[origy+i][origx+j].tiletype == TILE_WALL) {
                 lev->grid[origy+i][origx+j].tiletype = TILE_FLOOR;
                 lev->grid[origy+i][origx+j].glyph = tile_chars[TILE_FLOOR];
+            }
         }
     }
 }
 
 
-/* Classic 3x3 level a la the original rogue *
+/* Classic 3x3 level a la the original rogue */ 
 struct floor threebythree() {
     struct floor ret = solidrock();
     int numrooms = d(3, 3);
 
     int rooms[9] = {0};
 
+    /* Randomly select some ninths of the map to make rooms in */
     for (int i = 0; i < numrooms; i++) {
         int r = rand() % 9;
         if (rooms[r]) {
@@ -92,19 +95,33 @@ struct floor threebythree() {
         }
     }
 
+    /* Make those rooms */
     for (int i = 0; i < 9; i++) {
-        if (rooms[r]) {
-            int height = d(3, 2) + 1;
-            int width = d(3, 6);
-            hollowoutroom(&ret, d(1, 8), d(1, 8-height), height, width);
-            
+        int sectory = i / 3;
+        int sectorx = i % 3;
+
+        if (rooms[i]) {
+            int height = d(2, 3);
+            int width = d(4, 6);
+            int origy = ((MAP_HEIGHT / 3) * (sectory) +
+                d(1, (MAP_HEIGHT / 3) - 2 - height));
+            int origx = (MAP_WIDTH  / 3) * (sectorx) +
+                d(1, (MAP_WIDTH  / 3) - 2 - width);
+
+            if (origx < 1) {
+                origx = 1;
+            }
+
+            if (origy < 1) {
+                origy = 1;
+            }
+
+            hollowoutroom(&ret, origy, origx, height, width);
         }
-        * FIXME make this more robust to handle possible different sizes of 
-         * floor *
     }
 
-} */
-
+    return ret;
+} 
 
 
 

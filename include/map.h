@@ -55,6 +55,7 @@ extern int dundepth;
 struct floor solidrock();
 struct floor noise();
 struct floor bigroom();
+struct floor threebythree();
 
 
 void addlev(struct floor (*generate)(void));
