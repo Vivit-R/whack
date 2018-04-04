@@ -9,7 +9,7 @@
 mon you;
 
 void inityou() {
-    you.name = malloc(sizeof (char) * strlen("You"));
+    you.name = malloc(sizeof (char) * (strlen("You") + 1));
     strcpy(you.name, "You");
 
     you.glyph = '@';
