@@ -55,7 +55,8 @@ struct floor bigroom() {
     return ret;
 }
 
-
+/* Hollows out a room dimy rows high and dimx columns wide, with the upper-left
+ * corner at row origy and column origx. */
 void hollowoutroom(struct floor *lev,
         int origy, int origx,
         int dimy, int dimx) {
@@ -67,14 +68,41 @@ void hollowoutroom(struct floor *lev,
         return;
     }
 
-    for (int i = 0; i < dimy; i++) {
-        for (int j = 0; j < dimx; j++) {
-            if (lev->grid[origy+i][origx+j].tiletype == TILE_WALL) {
-                lev->grid[origy+i][origx+j].tiletype = TILE_FLOOR;
-                lev->grid[origy+i][origx+j].glyph = tile_chars[TILE_FLOOR];
+    for (int i = origy; i < origy+dimy; i++) {
+        for (int j = origy; j < origx+dimx; j++) {
+            if (lev->grid[i][j].tiletype == TILE_WALL) {
+                lev->grid[i][j].tiletype = TILE_FLOOR;
+                lev->grid[i][j].glyph = tile_chars[TILE_FLOOR];
             }
         }
     }
+}
+
+/* Hollows out a room with a wall around it. */
+void walledroom(struct floor *lev,
+        int origy, int origx,
+        int dimy, int dimx) {
+    if (origx < 0 || origy < 0 || 
+            origx > MAP_WIDTH || origy > MAP_HEIGHT ||
+            dimy <= 2 || dimx < 2 ||
+            origx + dimx > MAP_WIDTH || origy + dimy > MAP_HEIGHT) {
+        // reporterror("Bad coordinates for hollowoutroom");
+        return;
+    }
+
+    for (int i = origy; i < origy+dimy; i++) {
+        if (i == origy || i == origy+dimy-1) {
+            for (int j = origx; j < origx+dimx; j++) {
+                if (lev->grid[i][j].tiletype == TILE_WALL) {
+                    lev->grid[i][j].glyph = '-';
+                }
+            }
+        } else {
+            lev->grid[i][origx].glyph = '|';
+            lev->grid[i][origx+dimx-1].glyph = '|';
+        }
+    }
+    hollowoutroom(lev, origy+1, origx+1, dimy-1, dimx-1);
 }
 
 
@@ -116,7 +144,7 @@ struct floor threebythree() {
                 origy = 1;
             }
 
-            hollowoutroom(&ret, origy, origx, height, width);
+            walledroom(&ret, origy, origx, height, width);
         }
     }
 
