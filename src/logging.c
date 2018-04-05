@@ -3,12 +3,14 @@
 #include "display.h"
 #include "map.h"
 
+
 void printlev(struct floor *l) {
+    printf("\n");
     for (int i = 0; i < MAP_HEIGHT; i++) {
         for (int j = 0; j < MAP_WIDTH; j++) {
-            putchar(char_to_print(&(l->grid[i][j]))); 
+            printf("%c", char_to_print(&(l->grid[i][j]))); 
         }
-        printf("\n\r");
+        printf("\n");
     }
 }
 

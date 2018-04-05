@@ -53,7 +53,9 @@ int main(int argc, char** argv) {
         testspecificmap(threebythree);
     } else if (IFARG("print3x3")) {
         addlev(threebythree);
+        endwin();
         printlev(dungeon);
+        initscr();
     } else {
         printf("Argument not recognized, or none was supplied!\n");
     }
