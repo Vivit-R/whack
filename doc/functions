@@ -1,0 +1,70 @@
+
+src/main.c:
+    void initall()
+    void freeall()
+
+src/datastruct.c:
+    void rmlink(struct listlink *l)
+        datastruct.c
+    void clearlinks(struct listlink *l, void (*op)(void*))
+        datastruct.c
+        test.c
+
+src/display.c:
+    void initdisplay()
+    void enddisplay()
+    char char_to_print(tile *t)
+    void updtile(tile *t)
+    void redraw()
+    int wmessage(int nlines, int ncols, int begin_y, int begin_x const char *msg)
+
+src/item.c:
+    void inititypes()
+    void freeitypes()
+    void mkitype(char glyph, const char *idname, const char *unidname)
+    int popitype()
+
+src/map.c:
+    struct floor solidrock()
+    struct floor noise()
+    struct floor bigroom()
+    void addlev(struct floor (*generate)(void))
+    tile mktile(int ycoord, int xcoord, int tiletype)
+    tile *randtile(int ycoord, int xcoord, int tiletype)
+    void rmlev(struct floor *lev)
+    void initdungeon()
+    void freedungeon()
+    void magicmapping(struct floor *lev)
+    void setseen(tile *t, int seen)
+    void seetile(tile *t)
+    void discovertile(tile *t)
+    void forgettile(tile *t)
+
+src/monster.c:
+    void initmons()
+    void freemons()
+    void rmmon(mon *m)
+    int putmon(tile *dest, mon *m)
+    int movemon(int dy, int dx, mon *m)
+    void spawnmons(int n, mon *m, struct floor *lev)
+
+src/test.c:
+    int main(int argc, char** argv)
+    void leakstest()
+    void linkstest()
+    void maptest()
+    void displaytest()
+    void testspecificmap(struct floor(*generate)(void))
+    void testhollow()
+    void testmon()
+
+src/you.c:
+    void inityou()
+    void freeyou()
+    void moveyou(char input)
+
+src/command.c:
+    void initcommands()
+    void getcmd()
+        Getches a keystroke, translates it into a command via the commands[]
+        array, and then executes the appropriate command.

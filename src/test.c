@@ -1,3 +1,5 @@
+/* TODO parameterize a visibility override for char_to_print */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -11,6 +13,7 @@
 #include "init.h"
 #include "datastruct.h"
 #include "you.h"
+#include "logging.h"
 
 #define IFARG(s) (argc-1 && !(strcmp(argv[1], s)))
 
@@ -48,6 +51,9 @@ int main(int argc, char** argv) {
         testmove();
     } else if (IFARG("3x3")) {
         testspecificmap(threebythree);
+    } else if (IFARG("print3x3")) {
+        addlev(threebythree);
+        printlev(dungeon);
     } else {
         printf("Argument not recognized, or none was supplied!\n");
     }

@@ -69,7 +69,7 @@ void hollowoutroom(struct floor *lev,
     }
 
     for (int i = origy; i < origy+dimy; i++) {
-        for (int j = origy; j < origx+dimx; j++) {
+        for (int j = origx; j < origx+dimx; j++) {
             if (lev->grid[i][j].tiletype == TILE_WALL) {
                 lev->grid[i][j].tiletype = TILE_FLOOR;
                 lev->grid[i][j].glyph = tile_chars[TILE_FLOOR];
@@ -101,8 +101,14 @@ void walledroom(struct floor *lev,
             lev->grid[i][origx].glyph = '|';
             lev->grid[i][origx+dimx-1].glyph = '|';
         }
+        magicmapping(lev);
+        redraw();
+
     }
-    hollowoutroom(lev, origy+1, origx+1, dimy-1, dimx-1);
+    hollowoutroom(lev, origy+1, origx+1, dimy-2, dimx-2);
+    magicmapping(lev);
+    redraw();
+
 }
 
 
@@ -128,13 +134,15 @@ struct floor threebythree() {
         int sectory = i / 3;
         int sectorx = i % 3;
 
+        /* NOTE: This math is reliant on the fact that
+         * MAP_HEIGHT % 3 = MAP_WIDTH % 3 = 2 */
         if (rooms[i]) {
-            int height = d(2, 3);
+            int height = d(4, 2);
             int width = d(4, 6);
             int origy = ((MAP_HEIGHT / 3) * (sectory) +
-                d(1, (MAP_HEIGHT / 3) - 2 - height));
+                d(1, (MAP_HEIGHT / 3) - height));
             int origx = (MAP_WIDTH  / 3) * (sectorx) +
-                d(1, (MAP_WIDTH  / 3) - 2 - width);
+                d(1, (MAP_WIDTH  / 3) - width);
 
             if (origx < 1) {
                 origx = 1;
@@ -226,7 +234,7 @@ void freedungeon() {
 }
 
 
-/** CHANGES TO STATE **/
+/** CHANGES TO STATE FOR ALREADY-GENERATED LEVELS **/
 /* Sets all tiles on the given level to visible */
 void magicmapping(struct floor *lev) {
     for (int i = 0; i < MAP_HEIGHT; i++) {

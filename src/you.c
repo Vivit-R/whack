@@ -21,5 +21,5 @@ void freeyou() {
 }
 
 void moveyou(char input) {
-    movemon(dircmd[input][0], dircmd[input][1], &you);
+    movemon(dircmd[(int) input][0], dircmd[(int) input][1], &you);
 }
