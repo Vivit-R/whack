@@ -73,6 +73,13 @@ int putmon(tile *dest, mon *m) {
 
 /* Tries to put a monster in a location relative to its current one */
 int movemon(int dy, int dx, mon *m) {
+    int newy = m->loc->ycoord+dy;
+    int newx = m->loc->xcoord+dx;
+
+    if (newy < 0 || newy > MAP_HEIGHT || newx < 0 || newx > MAP_WIDTH) {
+        return 1; /* Tile was out of bounds, and thus impassible */
+    }
+
     return putmon(
             &((dungeon+curfloor)->grid[m->loc->ycoord+dy][m->loc->xcoord+dx]),
             m);

@@ -50,7 +50,7 @@ struct floor noise() {
 
 struct floor bigroom() {
     struct floor ret = solidrock();
-    hollowoutroom(&ret, 1, 1, MAP_HEIGHT-2, MAP_WIDTH-2);
+    walledroom(&ret, 0, 0, MAP_HEIGHT-1, MAP_WIDTH-1);
 
     return ret;
 }
@@ -130,10 +130,10 @@ struct floor threebythree() {
     }
 
     /* Arrays for the coordinates and dimensions of the rooms. */
-    int *roomrows = sizeof (int) * 9;
-    int *roomcols = sizeof (int) * 9;
-    int *roomdimy = sizeof (int) * 9;
-    int *roomdimx = sizeof (int) * 9;
+    int *roomrows = malloc(sizeof (int) * 9);
+    int *roomcols = malloc(sizeof (int) * 9);
+    int *roomdimy = malloc(sizeof (int) * 9);
+    int *roomdimx = malloc(sizeof (int) * 9);
     
     int sectory;
     int sectorx;
@@ -142,8 +142,8 @@ struct floor threebythree() {
     for (int i = 0; i < 9; i++) {
         /* Initializing roomrows[i] and roomcols[i] to -1 to indicate that 
          * there is no room here (yet).*/
-        int roomrows[i] = -1;
-        int roomcols[i] = -1;
+        roomrows[i] = -1;
+        roomcols[i] = -1;
 
         sectory = i / 3;
         sectorx = i % 3;
@@ -152,7 +152,7 @@ struct floor threebythree() {
         /* NOTE: This math is reliant on the fact that
          * MAP_HEIGHT % 3 = MAP_WIDTH % 3 = 2 */
         if (rooms[i]) {
-            int height = d(2, 2) + d(1, 3);
+            int height = d(3, 2) + 1;
             int width = d(4, 6);
             int origy = ((MAP_HEIGHT / 3) * (sectory) +
                 d(1, (MAP_HEIGHT / 3) - height));
@@ -167,11 +167,45 @@ struct floor threebythree() {
             roomdimy[i] = height;
             roomdimx[i] = width;
 
-            // TODO
 
             walledroom(&ret, origy, origx, height, width);
         }
     }
+
+    int randroom;
+    int stairy;
+    int stairx;
+
+    int done = 0;
+
+    /* Place stairs. */
+    while (!done) {
+        randroom = rand() % 9;
+        if (rooms[randroom]) {
+            stairy = roomrows[randroom] + d(1, roomdimy[randroom]-2);
+            stairx = roomcols[randroom] + d(1, roomdimx[randroom]-2);
+            ret.grid[stairy][stairx].tiletype = TILE_UPSTAIR;
+            ret.grid[stairy][stairx].glyph = tile_chars[TILE_UPSTAIR]; 
+            done = 1;
+        }
+    }
+
+    done = 0;
+    
+    while (!done) {
+        randroom = rand() % 9;
+        if (rooms[randroom]) {
+            stairy = roomrows[randroom] + d(1, roomdimy[randroom]-2);
+            stairx = roomcols[randroom] + d(1, roomdimx[randroom]-2);
+            if (ret.grid[stairy][stairx].tiletype != TILE_UPSTAIR) {
+                ret.grid[stairy][stairx].tiletype = TILE_DOWNSTAIR;
+                ret.grid[stairy][stairx].glyph = tile_chars[TILE_DOWNSTAIR]; 
+                done = 1;
+            }
+        }
+    }
+
+    done = 0;
 
     /* Put doors in the walls of those rooms.
      * Some rules:

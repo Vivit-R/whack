@@ -52,7 +52,7 @@ int main(int argc, char** argv) {
     } else if (IFARG("3x3")) {
         testspecificmap(threebythree);
     } else if (IFARG("print3x3")) {
-        FILE *samples = fopen("sample-maps", "w");
+        FILE *samples = fopen("test-maps", "w");
 
         for (int i = 0; i < 100; i++) {
             addlev(threebythree);

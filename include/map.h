@@ -61,8 +61,12 @@ struct floor threebythree();
 
 void addlev(struct floor (*generate)(void));
 void magicmapping(struct floor *l);
-void hollowoutroom(struct floor *lev, int origy, int origx, int dimy,
-        int dimx); 
+void hollowoutroom(struct floor *lev,
+        int origy, int origx,
+        int dimy, int dimx); 
+void walledroom(struct floor *lev,
+        int origy, int origx,
+        int dimy, int dimx);
 
 tile mktile(int ycoord, int xcoord, int tiletype);
 tile *randtile(int tiletype);
