@@ -45,6 +45,7 @@ typedef struct t_tile {
 
 struct floor {
     int branch;
+    struct room *rooms;
     tile grid[MAP_HEIGHT][MAP_WIDTH];
 };
 

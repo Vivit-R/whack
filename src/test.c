@@ -52,19 +52,20 @@ int main(int argc, char** argv) {
     } else if (IFARG("3x3")) {
         testspecificmap(threebythree);
     } else if (IFARG("print3x3")) {
-        addlev(threebythree);
-        endwin();
-        printlev(dungeon);
-        initscr();
+        FILE *samples = fopen("sample-maps", "w");
+
+        for (int i = 0; i < 100; i++) {
+            addlev(threebythree);
+            printlev(dungeon+i, samples);
+        }
+
+        fclose(samples);
     } else {
         printf("Argument not recognized, or none was supplied!\n");
     }
 
     freeall();
-
-    return 0;
-}
-
+return 0; } 
 
 void linkstest() {
     struct listlink *foo = malloc(sizeof (struct listlink));

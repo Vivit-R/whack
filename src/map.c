@@ -129,35 +129,66 @@ struct floor threebythree() {
         }
     }
 
+    /* Arrays for the coordinates and dimensions of the rooms. */
+    int *roomrows = sizeof (int) * 9;
+    int *roomcols = sizeof (int) * 9;
+    int *roomdimy = sizeof (int) * 9;
+    int *roomdimx = sizeof (int) * 9;
+    
+    int sectory;
+    int sectorx;
+
     /* Make those rooms */
     for (int i = 0; i < 9; i++) {
-        int sectory = i / 3;
-        int sectorx = i % 3;
+        /* Initializing roomrows[i] and roomcols[i] to -1 to indicate that 
+         * there is no room here (yet).*/
+        int roomrows[i] = -1;
+        int roomcols[i] = -1;
+
+        sectory = i / 3;
+        sectorx = i % 3;
+
 
         /* NOTE: This math is reliant on the fact that
          * MAP_HEIGHT % 3 = MAP_WIDTH % 3 = 2 */
         if (rooms[i]) {
-            int height = d(4, 2);
+            int height = d(2, 2) + d(1, 3);
             int width = d(4, 6);
             int origy = ((MAP_HEIGHT / 3) * (sectory) +
                 d(1, (MAP_HEIGHT / 3) - height));
             int origx = (MAP_WIDTH  / 3) * (sectorx) +
                 d(1, (MAP_WIDTH  / 3) - width);
 
-            if (origx < 1) {
-                origx = 1;
-            }
+            if (origy < 1) { origy = 1; }
+            if (origx < 1) { origx = 1; }
 
-            if (origy < 1) {
-                origy = 1;
-            }
+            roomrows[i] = origy;
+            roomcols[i] = origx;
+            roomdimy[i] = height;
+            roomdimx[i] = width;
+
+            // TODO
 
             walledroom(&ret, origy, origx, height, width);
         }
     }
 
+    /* Put doors in the walls of those rooms.
+     * Some rules:
+     * Only one door per wall.
+     * Hallways may cross one another. */
+    for (int i = 0; i < 9; i++) {
+        if (rooms[i]) {
+            switch (i) {
+                
+            }
+        }
+    }
+
+    free(roomrows);
+    free(roomcols);
     return ret;
-} 
+}
 
 
 
