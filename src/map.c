@@ -117,62 +117,72 @@ struct floor threebythree() {
     struct floor ret = solidrock();
     int numrooms = d(3, 3);
 
-    int rooms[9] = {0};
+    int rooms[3][3] = {{0, 0, 0},
+                       {0, 0, 0},
+                       {0, 0, 0}};
 
     /* Randomly select some ninths of the map to make rooms in */
     for (int i = 0; i < numrooms; i++) {
-        int r = rand() % 9;
-        if (rooms[r]) {
+        int ry = rand() % 3;
+        int rx = rand() % 3;
+        if (rooms[ry][rx]) {
             i--;
         } else {
-            rooms[r] = 1;
+            rooms[ry][rx] = 1;
         }
     }
 
     /* Arrays for the coordinates and dimensions of the rooms. */
-    int *roomrows = malloc(sizeof (int) * 9);
-    int *roomcols = malloc(sizeof (int) * 9);
-    int *roomdimy = malloc(sizeof (int) * 9);
-    int *roomdimx = malloc(sizeof (int) * 9);
-    
+    int roomrows[3][3] = {{-1, -1, -1},
+                          {-1, -1, -1},
+                          {-1, -1, -1}};
+
+    int roomcols[3][3] = {{-1, -1, -1},
+                          {-1, -1, -1},
+                          {-1, -1, -1}};
+
+    int roomdimy[3][3] = {{-1, -1, -1},
+                          {-1, -1, -1},
+                          {-1, -1, -1}};
+
+    int roomdimx[3][3] = {{-1, -1, -1},
+                          {-1, -1, -1},
+                          {-1, -1, -1}};
+ 
     int sectory;
     int sectorx;
 
     /* Make those rooms */
-    for (int i = 0; i < 9; i++) {
-        /* Initializing roomrows[i] and roomcols[i] to -1 to indicate that 
-         * there is no room here (yet).*/
-        roomrows[i] = -1;
-        roomcols[i] = -1;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            /* The map is divided into nine sectors arranged like a tic-tac-toe
+               board, with a one-tile-wide gap between each sector. */
+            /* NOTE: This math is reliant on the fact that
+             * MAP_HEIGHT % 3 = MAP_WIDTH % 3 = 2 */
+            if (rooms[i]) {
+                int height = d(4, 2);
+                int width = d(4, 6);
+                int origy = (MAP_HEIGHT / 3) * i +
+                    d(1, (MAP_HEIGHT / 3) - height) - 1;
+                int origx = (MAP_WIDTH  / 3) * j +
+                    d(1, (MAP_WIDTH  / 3) - width) - 1;
 
-        sectory = i / 3;
-        sectorx = i % 3;
+                if (origy < 1) { origy = 1; }
+                if (origx < 1) { origx = 1; }
 
+                roomrows[i][j] = origy;
+                roomcols[i][j] = origx;
+                roomdimy[i][j] = height;
+                roomdimx[i][j] = width;
 
-        /* NOTE: This math is reliant on the fact that
-         * MAP_HEIGHT % 3 = MAP_WIDTH % 3 = 2 */
-        if (rooms[i]) {
-            int height = d(3, 2) + 1;
-            int width = d(4, 6);
-            int origy = ((MAP_HEIGHT / 3) * (sectory) +
-                d(1, (MAP_HEIGHT / 3) - height));
-            int origx = (MAP_WIDTH  / 3) * (sectorx) +
-                d(1, (MAP_WIDTH  / 3) - width);
-
-            if (origy < 1) { origy = 1; }
-            if (origx < 1) { origx = 1; }
-
-            roomrows[i] = origy;
-            roomcols[i] = origx;
-            roomdimy[i] = height;
-            roomdimx[i] = width;
-
-
-            walledroom(&ret, origy, origx, height, width);
+                walledroom(&ret, origy, origx, height, width);
+            }
         }
     }
-
-    int randroom;
+     
+    
+    int secy;
+    int secx;
     int stairy;
     int stairx;
 
@@ -180,10 +190,11 @@ struct floor threebythree() {
 
     /* Place stairs. */
     while (!done) {
-        randroom = rand() % 9;
-        if (rooms[randroom]) {
-            stairy = roomrows[randroom] + d(1, roomdimy[randroom]-2);
-            stairx = roomcols[randroom] + d(1, roomdimx[randroom]-2);
+        secy = rand() % 3;
+        secx = rand() % 3;
+        if (rooms[secy][secx]) {
+            stairy = roomrows[secy][secx] + d(1, roomdimy[secy][secx]-2);
+            stairx = roomcols[secy][secx] + d(1, roomdimx[secy][secx]-2);
             ret.grid[stairy][stairx].tiletype = TILE_UPSTAIR;
             ret.grid[stairy][stairx].glyph = tile_chars[TILE_UPSTAIR]; 
             done = 1;
@@ -193,10 +204,11 @@ struct floor threebythree() {
     done = 0;
     
     while (!done) {
-        randroom = rand() % 9;
-        if (rooms[randroom]) {
-            stairy = roomrows[randroom] + d(1, roomdimy[randroom]-2);
-            stairx = roomcols[randroom] + d(1, roomdimx[randroom]-2);
+        secy = rand() % 3;
+        secx = rand() % 3;
+        if (rooms[secy][secx]) {
+            stairy = roomrows[secy][secx] + d(1, roomdimy[secy][secx]-2);
+            stairx = roomcols[secy][secx] + d(1, roomdimx[secy][secx]-2);
             if (ret.grid[stairy][stairx].tiletype != TILE_UPSTAIR) {
                 ret.grid[stairy][stairx].tiletype = TILE_DOWNSTAIR;
                 ret.grid[stairy][stairx].glyph = tile_chars[TILE_DOWNSTAIR]; 
@@ -209,8 +221,10 @@ struct floor threebythree() {
 
     /* Put doors in the walls of those rooms.
      * Some rules:
-     * Only one door per wall.
-     * Hallways may cross one another. */
+     * - Only one door per wall.
+     * - Hallways may cross one another.
+     * - A door in one of the edge and corner sectors may never face the edge
+         of the map.*/
     for (int i = 0; i < 9; i++) {
         if (rooms[i]) {
             switch (i) {
@@ -219,8 +233,6 @@ struct floor threebythree() {
         }
     }
 
-    free(roomrows);
-    free(roomcols);
     return ret;
 }
 
